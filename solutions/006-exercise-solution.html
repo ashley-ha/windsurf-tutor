@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Comment Thread System - Solution</title>
+    <style>
+        .comment {
+            border-left: 2px solid #ddd;
+            margin: 10px 0;
+            padding-left: 10px;
+        }
+        .comment-content {
+            margin: 5px 0;
+        }
+        .highlighted {
+            background-color: yellow;
+        }
+        .likes {
+            color: green;
+        }
+        .nested-comments {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="comment-thread">
+        <!-- Same comment structure as exercise -->
+    </div>
+
+    <script>
+        function findMostLikedComment(rootElement) {
+            let maxLikes = 0;
+            let mostLikedComment = null;
+            
+            // Get all comments using getElementsByClassName
+            const comments = rootElement.getElementsByClassName('comment');
+            
+            // Loop through each comment
+            for (const comment of comments) {
+                const likes = parseInt(comment.dataset.likes);
+                if (likes > maxLikes) {
+                    maxLikes = likes;
+                    mostLikedComment = comment;
+                }
+            }
+            
+            return mostLikedComment;
+        }
+
+        function countTotalComments(rootElement) {
+            // Base case: if no element, return 0
+            if (!rootElement) return 0;
+            
+            let count = 0;
+            
+            // If this element is a comment, count it
+            if (rootElement.classList.contains('comment')) {
+                count = 1;
+            }
+            
+            // Recursively count children
+            const children = rootElement.children;
+            for (const child of children) {
+                count += countTotalComments(child);
+            }
+            
+            return count;
+        }
+
+        function findCommentsByText(rootElement, searchText) {
+            // Base case: if no element, return
+            if (!rootElement) return;
+            
+            // If this is a comment, check its content
+            if (rootElement.classList.contains('comment')) {
+                const content = rootElement.querySelector('.comment-content');
+                if (content && content.textContent.toLowerCase().includes(searchText.toLowerCase())) {
+                    content.classList.add('highlighted');
+                }
+            }
+            
+            // Recursively search children
+            const children = rootElement.children;
+            for (const child of children) {
+                findCommentsByText(child, searchText);
+            }
+        }
+
+        // Test your functions here:
+        const commentThread = document.getElementById('comment-thread');
+        
+        // Test Task 1
+        const mostLiked = findMostLikedComment(commentThread);
+        console.log('Most liked comment:', mostLiked?.querySelector('.comment-content').textContent);
+        
+        // Test Task 2
+        const totalComments = countTotalComments(commentThread);
+        console.log('Total comments:', totalComments);
+        
+        // Test Task 3
+        findCommentsByText(commentThread, 'agree');
+    </script>
+</body>
+</html>

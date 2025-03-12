@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DOM Tree Visualizer</title>
+    <style>
+        .tree-container {
+            font-family: monospace;
+            margin: 20px;
+        }
+        .tree-node {
+            margin-left: 20px;
+            position: relative;
+        }
+        .node-content {
+            padding: 5px;
+            margin: 2px;
+            border: 1px solid #ddd;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .node-content:hover {
+            background-color: #f0f0f0;
+        }
+        .node-content.highlighted {
+            background-color: rgba(255, 255, 0, 0.3);
+            outline: 2px solid orange;
+        }
+        .node-children {
+            margin-left: 20px;
+            border-left: 1px dashed #ccc;
+        }
+        .clickable {
+            cursor: pointer;
+            border: 2px solid #4CAF50;
+        }
+        .visible {
+            background-color: #e8f5e9;
+        }
+        #tree-view {
+            float: left;
+            width: 50%;
+            height: 100vh;
+            overflow: auto;
+        }
+        #preview {
+            float: right;
+            width: 50%;
+            height: 100vh;
+            border: none;
+        }
+        .controls {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button onclick="toggleAllNodes()">Expand/Collapse All</button>
+        <button onclick="highlightInteractiveElements()">Highlight Interactive Elements</button>
+        <button onclick="highlightVisibleElements()">Highlight Visible Elements</button>
+    </div>
+    
+    <div id="tree-view"></div>
+    <iframe id="preview"></iframe>
+
+    <script>
+        // Store references to DOM elements
+        const treeView = document.getElementById('tree-view');
+        const preview = document.getElementById('preview');
+        let expandedNodes = new Set();
+
+        // Function to check if an element is visible
+        function isVisible(element) {
+            const style = window.getComputedStyle(element);
+            return style.display !== 'none' && 
+                   style.visibility !== 'hidden' && 
+                   style.opacity !== '0';
+        }
+
+        // Function to check if an element is interactive
+        function isInteractive(element) {
+            const interactiveTags = ['A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'];
+            return interactiveTags.includes(element.tagName) || 
+                   element.onclick !== null || 
+                   element.getAttribute('role') === 'button';
+        }
+
+        // Function to create a DOM tree node
+        function createTreeNode(element, level = 0) {
+            const nodeDiv = document.createElement('div');
+            nodeDiv.className = 'tree-node';
+
+            const nodeContent = document.createElement('div');
+            nodeContent.className = 'node-content';
+            
+            // Add tag name and important attributes
+            let content = element.tagName.toLowerCase();
+            if (element.id) content += `#${element.id}`;
+            if (element.className) content += `.${element.className.split(' ').join('.')}`;
+            
+            nodeContent.textContent = content;
+            
+            // Add visual indicators for interactive and visible elements
+            if (isInteractive(element)) {
+                nodeContent.classList.add('clickable');
+            }
+            if (isVisible(element)) {
+                nodeContent.classList.add('visible');
+            }
+
+            // Add click handler to highlight corresponding element
+            nodeContent.onclick = () => {
+                // Remove previous highlights
+                document.querySelectorAll('.highlighted').forEach(el => 
+                    el.classList.remove('highlighted'));
+                
+                // Add highlight to this node
+                nodeContent.classList.add('highlighted');
+                
+                // Highlight actual element in preview
+                const previewDoc = preview.contentDocument;
+                if (previewDoc) {
+                    // Create unique selector for this element
+                    const selector = generateUniqueSelector(element);
+                    const previewElement = previewDoc.querySelector(selector);
+                    if (previewElement) {
+                        previewElement.scrollIntoView({ behavior: 'smooth' });
+                        highlightElement(previewElement);
+                    }
+                }
+            };
+
+            nodeDiv.appendChild(nodeContent);
+
+            // Process child nodes if they exist
+            if (element.children.length > 0) {
+                const childrenContainer = document.createElement('div');
+                childrenContainer.className = 'node-children';
+                childrenContainer.style.display = expandedNodes.has(element) ? 'block' : 'none';
+
+                Array.from(element.children).forEach(child => {
+                    childrenContainer.appendChild(createTreeNode(child, level + 1));
+                });
+
+                nodeDiv.appendChild(childrenContainer);
+            }
+
+            return nodeDiv;
+        }
+
+        // Function to generate a unique selector for an element
+        function generateUniqueSelector(element) {
+            if (element.id) return `#${element.id}`;
+            
+            let selector = element.tagName.toLowerCase();
+            if (element.className) {
+                selector += `.${element.className.split(' ').join('.')}`;
+            }
+            
+            if (element.parentElement) {
+                const siblings = element.parentElement.children;
+                const index = Array.from(siblings).indexOf(element);
+                selector += `:nth-child(${index + 1})`;
+            }
+            
+            return selector;
+        }
+
+        // Function to highlight an element
+        function highlightElement(element) {
+            // Remove existing highlights
+            const existingHighlight = element.querySelector('.highlight-overlay');
+            if (existingHighlight) {
+                existingHighlight.remove();
+            }
+
+            // Create highlight overlay
+            const highlight = document.createElement('div');
+            highlight.className = 'highlight-overlay';
+            highlight.style.position = 'absolute';
+            highlight.style.border = '2px solid orange';
+            highlight.style.backgroundColor = 'rgba(255, 165, 0, 0.2)';
+            highlight.style.pointerEvents = 'none';
+            highlight.style.zIndex = '10000';
+
+            // Position the highlight
+            const rect = element.getBoundingClientRect();
+            highlight.style.top = `${rect.top}px`;
+            highlight.style.left = `${rect.left}px`;
+            highlight.style.width = `${rect.width}px`;
+            highlight.style.height = `${rect.height}px`;
+
+            document.body.appendChild(highlight);
+
+            // Remove highlight after 2 seconds
+            setTimeout(() => highlight.remove(), 2000);
+        }
+
+        // Function to toggle all nodes
+        function toggleAllNodes() {
+            const nodeChildren = document.querySelectorAll('.node-children');
+            const allExpanded = Array.from(nodeChildren)
+                .every(node => node.style.display === 'block');
+
+            nodeChildren.forEach(node => {
+                node.style.display = allExpanded ? 'none' : 'block';
+            });
+        }
+
+        // Function to highlight interactive elements
+        function highlightInteractiveElements() {
+            document.querySelectorAll('.node-content').forEach(node => {
+                node.classList.remove('highlighted');
+            });
+
+            document.querySelectorAll('.clickable').forEach(node => {
+                node.classList.add('highlighted');
+            });
+        }
+
+        // Function to highlight visible elements
+        function highlightVisibleElements() {
+            document.querySelectorAll('.node-content').forEach(node => {
+                node.classList.remove('highlighted');
+            });
+
+            document.querySelectorAll('.visible').forEach(node => {
+                node.classList.add('highlighted');
+            });
+        }
+
+        // Initialize the tree with the current document
+        function initializeTree() {
+            const tree = createTreeNode(document.documentElement);
+            treeView.appendChild(tree);
+        }
+
+        // Initialize when the page loads
+        window.onload = initializeTree;
+    </script>
+</body>
+</html>

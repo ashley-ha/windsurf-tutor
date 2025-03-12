@@ -57,7 +57,16 @@
         // This function should traverse the comment thread and return the comment
         // with the highest number of likes
         function findMostLikedComment(rootElement) {
-            // Your code here
+            let mostLikes = 0;
+            let mostLikedComment = null;
+            const allComments = rootElement.getElementsByClassName('comment')
+            for (const comment of allComments) {
+                const likes = parseInt(comment.getAttribute('data-likes'))
+                if (likes > mostLikes) {
+                    mostLikedComment = comment
+                }
+            }
+            return mostLikedComment;
         }
 
         // Task 2: Implement countTotalComments
