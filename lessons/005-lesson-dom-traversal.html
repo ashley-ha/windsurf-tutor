@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Explorer - DOM Traversal</title>
+    <style>
+        .folder {
+            margin-left: 20px;
+            cursor: pointer;
+        }
+        .file {
+            margin-left: 40px;
+            color: #666;
+        }
+        .folder::before {
+            content: '📁';
+            margin-right: 5px;
+        }
+        .file::before {
+            content: '📄';
+            margin-right: 5px;
+        }
+        .selected {
+            background-color: #e6f3ff;
+        }
+        #info-panel {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <h2>File Explorer</h2>
+    <div id="file-system">
+        <div class="folder" id="root">
+            projects
+            <div class="folder">
+                webapp
+                <div class="file">index.html</div>
+                <div class="file">styles.css</div>
+                <div class="folder">
+                    js
+                    <div class="file">app.js</div>
+                    <div class="file">utils.js</div>
+                </div>
+            </div>
+            <div class="folder">
+                docs
+                <div class="file">readme.md</div>
+            </div>
+        </div>
+    </div>
+    <div id="info-panel"></div>
+
+    <script>
+        // Basic DOM Traversal Methods:
+        // 1. parentElement - gets the parent node
+        // 2. children - gets direct children
+        // 3. firstElementChild - gets first child
+        // 4. lastElementChild - gets last child
+        // 5. nextElementSibling - gets next sibling
+        // 6. previousElementSibling - gets previous sibling
+
+        function traverseUp(element) {
+            // Go up one level in the tree
+            const parent = element.parentElement;
+            if (parent && parent.id !== 'file-system') {
+                selectElement(parent);
+            }
+        }
+
+        function traverseDown(element) {
+            // Go down to first child
+            const firstChild = element.firstElementChild;
+            if (firstChild) {
+                selectElement(firstChild);
+            }
+        }
+
+        function traverseNext(element) {
+            // Go to next sibling
+            const nextSibling = element.nextElementSibling;
+            if (nextSibling) {
+                selectElement(nextSibling);
+            }
+        }
+
+        function traversePrevious(element) {
+            // Go to previous sibling
+            const prevSibling = element.previousElementSibling;
+            if (prevSibling) {
+                selectElement(prevSibling);
+            }
+        }
+
+        function selectElement(element) {
+            // Remove previous selection
+            const selected = document.querySelector('.selected');
+            if (selected) {
+                selected.classList.remove('selected');
+            }
+            
+            // Add selection to new element
+            element.classList.add('selected');
+            
+            // Update info panel
+            updateInfoPanel(element);
+        }
+
+        function updateInfoPanel(element) {
+            const infoPanel = document.getElementById('info-panel');
+            const path = getElementPath(element);
+            infoPanel.innerHTML = `
+                <strong>Current Path:</strong> ${path}<br>
+                <strong>Type:</strong> ${element.classList.contains('folder') ? 'Folder' : 'File'}<br>
+                <strong>Children:</strong> ${element.children.length}<br>
+                <strong>Parent:</strong> ${element.parentElement.textContent.trim().split('\n')[0]}
+            `;
+        }
+
+        function getElementPath(element) {
+            let path = [];
+            let current = element;
+            
+            while (current && current.id !== 'file-system') {
+                path.unshift(current.textContent.trim().split('\n')[0]);
+                current = current.parentElement;
+            }
+            
+            return '/' + path.join('/');
+        }
+
+        // Add click handlers
+        document.addEventListener('keydown', function(e) {
+            const selected = document.querySelector('.selected') || document.getElementById('root');
+            
+            switch(e.key) {
+                case 'ArrowUp':
+                    traversePrevious(selected);
+                    break;
+                case 'ArrowDown':
+                    traverseNext(selected);
+                    break;
+                case 'ArrowLeft':
+                    traverseUp(selected);
+                    break;
+                case 'ArrowRight':
+                    traverseDown(selected);
+                    break;
+            }
+        });
+
+        // Initialize with root selected
+        selectElement(document.getElementById('root'));
+    </script>
+</body>
+</html>
