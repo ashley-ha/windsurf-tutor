@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Comment Thread System</title>
+    <style>
+        .comment {
+            border-left: 2px solid #ddd;
+            margin: 10px 0;
+            padding-left: 10px;
+        }
+        .comment-content {
+            margin: 5px 0;
+        }
+        .highlighted {
+            background-color: yellow;
+        }
+        .likes {
+            color: green;
+        }
+        .nested-comments {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="comment-thread">
+        <div class="comment" data-likes="5">
+            <div class="comment-content">Great article!</div>
+            <span class="likes">5 likes</span>
+            <div class="nested-comments">
+                <div class="comment" data-likes="3">
+                    <div class="comment-content">Thanks!</div>
+                    <span class="likes">3 likes</span>
+                </div>
+            </div>
+        </div>
+        <div class="comment" data-likes="8">
+            <div class="comment-content">Very informative</div>
+            <span class="likes">8 likes</span>
+            <div class="nested-comments">
+                <div class="comment" data-likes="2">
+                    <div class="comment-content">I agree!</div>
+                    <span class="likes">2 likes</span>
+                    <div class="nested-comments">
+                        <div class="comment" data-likes="10">
+                            <div class="comment-content">Me too!</div>
+                            <span class="likes">10 likes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Task 1: Implement findMostLikedComment
+        // This function should traverse the comment thread and return the comment
+        // with the highest number of likes
+        function findMostLikedComment(rootElement) {
+            // Your code here
+        }
+
+        // Task 2: Implement countTotalComments
+        // This function should return the total number of comments in the thread
+        function countTotalComments(rootElement) {
+            // Your code here
+        }
+
+        // Task 3: Implement findCommentsByText
+        // This function should find all comments that contain the specified text
+        // and highlight them by adding the 'highlighted' class
+        function findCommentsByText(rootElement, searchText) {
+            // Your code here
+        }
+
+        // Test your functions here:
+        const commentThread = document.getElementById('comment-thread');
+        
+        // Test Task 1
+        const mostLiked = findMostLikedComment(commentThread);
+        console.log('Most liked comment:', mostLiked?.querySelector('.comment-content').textContent);
+        
+        // Test Task 2
+        const totalComments = countTotalComments(commentThread);
+        console.log('Total comments:', totalComments);
+        
+        // Test Task 3
+        findCommentsByText(commentThread, 'agree');
+    </script>
+</body>
+</html>
