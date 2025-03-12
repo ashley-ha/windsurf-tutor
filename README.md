@@ -1,1 +1,3 @@
-# My Repo
+# Windsurf CS Tutor
+Learn anything! 
+
