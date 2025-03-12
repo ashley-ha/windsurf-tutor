@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic DOM Tree Visualization</title>
+    <style>
+        .tree-node {
+            margin-left: 20px;
+        }
+        .node-content {
+            padding: 5px;
+            margin: 2px;
+            border: 1px solid #ddd;
+            display: inline-block;
+        }
+        .node-children {
+            margin-left: 20px;
+            border-left: 1px dashed #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div id="sample-content">
+        <h1>Sample Content</h1>
+        <div class="container">
+            <p>Paragraph 1</p>
+            <p>Paragraph 2</p>
+            <ul>
+                <li>Item 1</li>
+                <li>Item 2</li>
+            </ul>
+        </div>
+    </div>
+    <div id="tree-view"></div>
+
+    <script>
+        function createTreeNode(element) {
+            // Create container for this node
+            const nodeDiv = document.createElement('div');
+            nodeDiv.className = 'tree-node';
+
+            // Create the content display for this node
+            const nodeContent = document.createElement('div');
+            nodeContent.className = 'node-content';
+            
+            // Build the node's text content (tag name and attributes)
+            let content = element.tagName.toLowerCase();
+            if (element.id) content += `#${element.id}`;
+            if (element.className) content += `.${element.className}`;
+            nodeContent.textContent = content;
+            
+            // Add the content to the node container
+            nodeDiv.appendChild(nodeContent);
+
+            // If this element has children, process them recursively
+            if (element.children.length > 0) {
+                const childrenContainer = document.createElement('div');
+                childrenContainer.className = 'node-children';
+
+                // Recursively create tree nodes for each child
+                Array.from(element.children).forEach(child => {
+                    childrenContainer.appendChild(createTreeNode(child));
+                });
+
+                // Add the children container to the node
+                nodeDiv.appendChild(childrenContainer);
+            }
+
+            return nodeDiv;
+        }
+
+        // Initialize the tree with our sample content
+        function initializeTree() {
+            const sampleContent = document.getElementById('sample-content');
+            const tree = createTreeNode(sampleContent);
+            document.getElementById('tree-view').appendChild(tree);
+        }
+
+        // Initialize when the page loads
+        window.onload = initializeTree;
+    </script>
+</body>
+</html>

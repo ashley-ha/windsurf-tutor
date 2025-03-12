@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive DOM Tree Exercise</title>
+    <style>
+        .tree-node {
+            margin-left: 20px;
+        }
+        .node-content {
+            padding: 5px;
+            margin: 2px;
+            border: 1px solid #ddd;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .node-content:hover {
+            background-color: #f0f0f0;
+        }
+        .node-content.highlighted {
+            background-color: rgba(255, 255, 0, 0.3);
+            outline: 2px solid orange;
+        }
+        .node-children {
+            margin-left: 20px;
+            border-left: 1px dashed #ccc;
+        }
+        .hidden {
+            display: none;
+        }
+        #sample-content {
+            float: right;
+            width: 40%;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        #tree-view {
+            float: left;
+            width: 55%;
+        }
+    </style>
+</head>
+<body>
+    <div id="tree-view"></div>
+    
+    <div id="sample-content">
+        <h1>Interactive Content</h1>
+        <div class="container">
+            <p>Click me!</p>
+            <button onclick="alert('Hello!')">Interactive Button</button>
+            <ul>
+                <li>Expandable Item 1</li>
+                <li>Expandable Item 2</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Task 1: Implement createTreeNode with expand/collapse functionality
+        // - Each node should be clickable to expand/collapse its children
+        // - Store the expanded state in the expandedNodes Set
+        const expandedNodes = new Set();
+        
+        function createTreeNode(element) {
+            // Your code here
+        }
+
+        // Task 2: Implement findInteractiveElements
+        // This function should return true if the element is interactive
+        // (has click handlers, is a button/link/input, etc.)
+        function findInteractiveElements(element) {
+            // Your code here
+        }
+
+        // Task 3: Implement highlightElement
+        // This function should:
+        // - Add the 'highlighted' class to the tree node
+        // - Add a highlight effect to the actual element in sample-content
+        // - Remove highlights from other elements
+        function highlightElement(element, treeNode) {
+            // Your code here
+        }
+
+        // Initialize the tree
+        function initializeTree() {
+            const sampleContent = document.getElementById('sample-content');
+            const tree = createTreeNode(sampleContent);
+            document.getElementById('tree-view').appendChild(tree);
+        }
+
+        window.onload = initializeTree;
+    </script>
+</body>
+</html>
