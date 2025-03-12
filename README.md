@@ -1,4 +1,3 @@
-# Windsurf Tutor
+# Windsurf CS Tutor
 Learn anything! 
 
-Weee
