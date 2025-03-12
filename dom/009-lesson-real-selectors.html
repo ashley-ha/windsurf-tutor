@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>E-commerce Product Page</title>
+    <style>
+        .product { border: 1px solid #ddd; margin: 10px; padding: 10px; }
+        .sale { color: red; }
+        .out-of-stock { color: #999; }
+        .featured { background-color: #fff3e0; }
+        .selected { border: 2px solid #4CAF50; }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <ul>
+            <li><a href="#" class="nav-link active">Home</a></li>
+            <li><a href="#" class="nav-link">Products</a></li>
+        </ul>
+    </nav>
+
+    <div class="product-grid">
+        <div class="product featured" id="product-1">
+            <h3>Wireless Headphones</h3>
+            <p class="price">$99.99</p>
+            <span class="stock-status">In Stock</span>
+        </div>
+
+        <div class="product sale" id="product-2">
+            <h3>Smart Watch</h3>
+            <p class="price">$149.99</p>
+            <span class="stock-status">In Stock</span>
+        </div>
+
+        <div class="product out-of-stock" id="product-3">
+            <h3>Bluetooth Speaker</h3>
+            <p class="price">$79.99</p>
+            <span class="stock-status">Out of Stock</span>
+        </div>
+    </div>
+
+    <script>
+        // 1. Select active navigation links
+        function highlightActiveNav() {
+            // Selects links that have BOTH 'nav-link' AND 'active' classes
+            const activeLinks = document.querySelectorAll('.nav-link.active');
+            activeLinks.forEach(link => link.classList.add('selected'));
+        }
+
+        // 2. Select all in-stock products
+        function showInStockProducts() {
+            // Selects products that don't have the 'out-of-stock' class
+            const inStockProducts = document.querySelectorAll('.product:not(.out-of-stock)');
+            inStockProducts.forEach(product => product.classList.add('selected'));
+        }
+
+        // 3. Select products with specific text content
+        function highlightCheapProducts() {
+            // Select all price elements
+            const prices = document.querySelectorAll('.price');
+            prices.forEach(price => {
+                // Get the price value and convert it to number
+                const value = parseFloat(price.textContent.replace('$', ''));
+                if (value < 100) {
+                    // Select the parent product div and highlight it
+                    price.closest('.product').classList.add('selected');
+                }
+            });
+        }
+    </script>
+
+    <button onclick="highlightActiveNav()">Show Active Nav</button>
+    <button onclick="showInStockProducts()">Show In-Stock Items</button>
+    <button onclick="highlightCheapProducts()">Show Items Under $100</button>
+</body>
+</html>

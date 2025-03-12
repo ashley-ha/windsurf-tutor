@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Battle of Helm's Deep</title>
+    <style>
+        .warrior { color: brown; }
+        .ready { background-color: lightgreen; }
+        #main-fortress { border: 2px solid grey; padding: 10px; }
+    </style>
+</head>
+<body>
+    <div id="main-fortress">
+        <h1>Helm's Deep Defenders</h1>
+        
+        <div class="army-group">
+            <h2>Rohirrim</h2>
+            <ul>
+                <li class="warrior">Théoden</li>
+                <li class="warrior">Éomer</li>
+            </ul>
+        </div>
+
+        <div class="army-group">
+            <h2>Elves</h2>
+            <ul>
+                <li class="warrior">Haldir</li>
+                <li class="warrior">Elven Archers</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Your tasks:
+        // 1. Write prepareWarrior() to add the 'ready' class to the FIRST warrior (using querySelector)
+        // 2. Write prepareAllWarriors() to add the 'ready' class to ALL warriors (using querySelectorAll)
+        // 3. Write prepareArmyGroups() to add the 'ready' class to all army-group divs (using getElementsByClassName)
+        
+        // Write your code below:
+        function prepareWarrior() {
+            const firstWarrior = document.querySelector('.warrior');
+            firstWarrior.classList.add('ready');
+        }
+
+        function prepareAllWarriors() {
+            const allWarriors = document.querySelectorAll('.warrior')
+            allWarriors.forEach(warrior => 
+                {warrior.classList.add('ready')
+                }
+            )
+        }
+
+        function prepareArmyGroups() {
+            const army = document.getElementsByClassName('army-group')
+            for(let armies of army)
+            armies.classList.add('ready')
+        }
+
+    </script>
+    
+    <button onclick="prepareWarrior()">Prepare First Warrior</button>
+    <button onclick="prepareAllWarriors()">Prepare All Warriors</button>
+    <button onclick="prepareArmyGroups()">Prepare Army Groups</button>
+</body>
+</html>

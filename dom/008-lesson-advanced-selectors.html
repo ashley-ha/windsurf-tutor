@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Advanced Selectors in Middle-earth</title>
+    <style>
+        .kingdom { border: 1px solid #ccc; margin: 10px; padding: 10px; }
+        .active { background-color: rgb(172, 241, 172); }
+        .enemy { background-color: #fb9393; }
+    </style>
+</head>
+<body>
+    <div id="middle-earth-map">
+        <div class="kingdom" id="gondor">
+            <h2>Gondor</h2>
+            <ul class="inhabitants">
+                <li class="human warrior">Aragorn</li>
+                <li class="human">Faramir</li>
+            </ul>
+        </div>
+
+        <div class="kingdom" id="rohan">
+            <h2>Rohan</h2>
+            <ul class="inhabitants">
+                <li class="human warrior">Théoden</li>
+                <li class="human warrior">Éomer</li>
+            </ul>
+        </div>
+
+        <div class="kingdom enemy" id="mordor">
+            <h2>Mordor</h2>
+            <ul class="inhabitants">
+                <li class="orc">Gothmog</li>
+                <li class="orc warrior">Shagrat</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 1. Select elements with multiple classes
+        function highlightWarriorHumans() {
+            // Selects elements that have BOTH 'human' AND 'warrior' classes
+            const humanWarriors = document.querySelectorAll('.human.warrior');
+            humanWarriors.forEach(warrior => warrior.classList.add('active'));
+        }
+        
+        // 2. Select elements within a specific container
+        function highlightGondorInhabitants() {
+            // Selects all li elements that are inside #gondor
+            const gondorPeople = document.querySelectorAll('#gondor li');
+            // or can also write as below
+            // const gondorPeople = document.querySelector('#gondor').querySelectorAll('li');
+            gondorPeople.forEach(person => person.classList.add('active'));
+        }
+
+        // 3. Select elements using attribute selectors
+        function highlightEnemyKingdoms() {
+            // Selects div elements that have the 'enemy' class
+            const enemies = document.querySelectorAll('div.enemy');
+            enemies.forEach(enemy => enemy.classList.add('active'));
+        }
+
+        // 4. Select specific child elements
+        function highlightFirstInhabitants() {
+            // Selects the first li element in each ul
+            const firstInhabitants = document.querySelectorAll('ul.inhabitants li:first-child');
+            firstInhabitants.forEach(inhabitant => inhabitant.classList.add('active'));
+        }
+    </script>
+
+    <button onclick="highlightWarriorHumans()">Highlight Human Warriors</button>
+    <button onclick="highlightGondorInhabitants()">Highlight Gondor People</button>
+    <button onclick="highlightEnemyKingdoms()">Highlight Enemy Kingdoms</button>
+    <button onclick="highlightFirstInhabitants()">Highlight First Inhabitants</button>
+</body>
+</html>

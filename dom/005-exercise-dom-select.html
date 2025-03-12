@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DOM Selection Exercise</title>
+    <style>
+        .wizard {
+            color: purple;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>The White Council</h1>
+    
+    <div id="wizards">
+        <ul>
+            <li id="gandalf">Gandalf</li>
+            <li id="saruman">Saruman</li>
+        </ul>
+    </div>
+
+    <script>
+        // Your task: Write a function called makeWizard that:
+        // 1. Selects the element with id="gandalf"
+        // 2. Adds the "wizard" class to it
+        // Write your code below:
+        function makeWizard(){
+            const gandalf = document.getElementById('gandalf')
+            gandalf.classList.add('wizard')
+        }
+
+    </script>
+    
+    <button onclick="makeWizard()">Transform Gandalf</button>
+</body>
+</html>

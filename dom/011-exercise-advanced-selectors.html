@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Advanced Selectors Exercise</title>
+    <style>
+        .product { padding: 10px; margin: 5px; }
+        .featured { border: 1px solid gold; }
+        .clearance { color: red; }
+        .selected { background-color: #ffeb3b; }
+        .premium { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="product-list">
+        <div class="product featured" data-category="electronics">
+            <h3>Smart Watch</h3>
+            <p class="price">$299</p>
+        </div>
+        <div class="product clearance premium" data-category="electronics">
+            <h3>Wireless Earbuds</h3>
+            <p class="price">$89</p>
+        </div>
+        <div class="product" data-category="accessories">
+            <h3>Watch Band</h3>
+            <p class="price">$29</p>
+        </div>
+        <div class="product featured premium" data-category="accessories">
+            <h3>Charging Dock</h3>
+            <p class="price">$49</p>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="task1()">Task 1</button>
+        <button onclick="task2()">Task 2</button>
+        <button onclick="task3()">Task 3</button>
+    </div>
+
+    <script>
+        // Task 1: Select all products that are both featured AND premium
+        function task1() {
+            const featuredAndPremium = document.querySelectorAll(".featured.premium")
+            featuredAndPremium.forEach(item => item.classList.add('selected'))
+        }
+
+        // Task 2: Select all products in the electronics category that are NOT on clearance
+        function task2() {
+            const electronicNoClearance = document.querySelectorAll('[data-category="electronics"]:not(.clearance)');
+            electronicNoClearance.forEach(item => item.classList.add('selected'));
+        }
+
+        // Task 3: Select all products that are either premium OR featured (or both)
+        function task3() {
+            const premOrFeatured = document.querySelectorAll('.premium, .featured')
+            premOrFeatured.forEach(item => item.classList.add('selected'))
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DOM Traversal Methods</title>
+    <style>
+        .family-tree { margin: 20px; }
+        .parent { border: 2px solid #333; padding: 10px; margin: 10px; }
+        .child { border: 1px solid #666; padding: 5px; margin: 5px; }
+        .selected { background-color: #ffeb3b; }
+    </style>
+</head>
+<body>
+    <div class="family-tree">
+        <div class="parent" id="parent1">
+            Parent 1
+            <div class="child">Child 1</div>
+            <div class="child">Child 2</div>
+            <div class="child">Child 3</div>
+        </div>
+        
+        <div class="parent" id="parent2">
+            Parent 2
+            <div class="child">Child 4</div>
+            <div class="child">Child 5</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="showParent()">Show Parent</button>
+        <button onclick="showChildren()">Show Children</button>
+        <button onclick="showSibling()">Show Next Sibling</button>
+    </div>
+
+    <script>
+        // Start with Child 1
+        const startingPoint = document.querySelector('#parent1 .child');
+
+        function showParent() {
+            // parentElement gets the direct parent
+            const parent = startingPoint.parentElement;
+            clearHighlights();
+            parent.classList.add('selected');
+        }
+
+        function showChildren() {
+            // children gets all direct child elements
+            const parent = document.getElementById('parent1');
+            const children = parent.children;
+            clearHighlights();
+            Array.from(children).forEach(child => {
+                if (child.classList.contains('child')) {
+                    child.classList.add('selected');
+                }
+            });
+        }
+f
+        function showSibling() {
+            // nextElementSibling gets the next sibling element
+            const nextSibling = startingPoint.nextElementSibling;
+            clearHighlights();
+            if (nextSibling) {
+                nextSibling.classList.add('selected');
+            }
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.selected').forEach(el => 
+                el.classList.remove('selected')
+            );
+        }
+    </script>
+</body>
+</html>

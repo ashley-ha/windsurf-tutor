@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Listing Page</title>
+    <style>
+        .product-card { border: 1px solid #ddd; margin: 10px; padding: 10px; }
+        .product-title { font-weight: bold; }
+        .price { color: #111; }
+        .sale-price { color: red; }
+        .selected { background-color: rgb(255, 124, 255); }
+        .in-cart { border: 2px solid #4CAF50; }
+    </style>
+</head>
+<body>
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="#" class="nav-link active">Products</a></li>
+            <li><a href="#" class="nav-link">Cart</a></li>
+        </ul>
+    </nav>
+
+    <div class="product-grid">
+        <div class="product-card" data-product-id="1">
+            <h3 class="product-title">Running Shoes</h3>
+            <p class="price">$120.00</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+        <div class="product-card sale" data-product-id="2">
+            <h3 class="product-title">Training Shoes</h3>
+            <p class="price sale-price">$89.99</p>
+            <span class="sale-badge">Sale</span>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+        <div class="product-card out-of-stock" data-product-id="3">
+            <h3 class="product-title">Basketball Shoes</h3>
+            <p class="price">$159.99</p>
+            <span class="stock-status">Out of Stock :(</span>
+        </div>
+    </div>
+
+    <script>
+        // 1. Select all sale products
+        function highlightSaleItems() {
+            // Uses querySelector to find elements with multiple classes
+            // finds product-card and sale classes 
+            const saleItems = document.querySelectorAll('.product-card.sale');
+            saleItems.forEach(item => item.classList.add('selected'));
+        }
+
+        // 2. Select products by data attribute
+        function findProductById(id) {
+            // Uses attribute selector to find specific product
+            const product = document.querySelector(`[data-product-id="${id}"]`);
+            product?.classList.add('selected');
+        }
+
+        // 3. Select all available products (not out of stock)
+        function showAvailableProducts() {
+            // Uses :not pseudo-class to exclude elements
+            const available = document.querySelectorAll('.product-card:not(.out-of-stock)');
+            available.forEach(product => product.classList.add('selected'));
+        }
+
+        // 4. Select products by price range
+        function highlightProductsUnder(maxPrice) {
+            const prices = document.querySelectorAll('.price');
+            prices.forEach(price => {
+                // Convert price text to number
+                const value = parseFloat(price.textContent.replace('$', ''));
+                if (value < maxPrice) {
+                    // Find parent product card and highlight it
+                    price.closest('.product-card').classList.add('selected');
+                }
+            });
+        }
+    </script>
+
+    <button onclick="highlightSaleItems()">Show Sale Items</button>
+    <button onclick="findProductById('2')">Find Product #2</button>
+    <button onclick="showAvailableProducts()">Show Available Items</button>
+    <button onclick="highlightProductsUnder(100)">Show Under $100</button>
+</body>
+</html>

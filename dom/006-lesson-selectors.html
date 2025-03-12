@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Different Ways to Select Elements</title>
+    <style>
+        .elf { color: green; }
+        .human { color: blue; }
+        .selected { background-color: yellow; }
+    </style>
+</head>
+<body>
+    <h1>Characters of Middle-earth</h1>
+
+    <div class="race-group">
+        <h2>Elves</h2>
+        <ul>
+            <li class="elf">Legolas</li>
+            <li class="elf">Galadriel</li>
+        </ul>
+    </div>
+
+    <div class="race-group">
+        <h2>Humans</h2>
+        <ul>
+            <li class="human">Aragorn</li>
+            <li class="human">Boromir</li>
+        </ul>
+    </div>
+
+    <script>
+        // 1. querySelector - selects the first matching element
+        function highlightFirstElf() {
+            const firstElf = document.querySelector('.elf');
+            firstElf.classList.add('selected');
+        }
+
+        // 2. querySelectorAll - selects all matching elements
+        function highlightAllHumans() {
+            const humans = document.querySelectorAll('.human');
+            humans.forEach(human => {
+                human.classList.add('selected');
+            });
+        }
+
+        // 3. getElementsByClassName - selects elements by class
+        function highlightAllGroups() {
+            const groups = document.getElementsByClassName('race-group');
+            for(let group of groups) {
+                group.classList.add('selected');
+            }
+        }
+    </script>
+
+    <button onclick="highlightFirstElf()">Highlight First Elf</button>
+    <button onclick="highlightAllHumans()">Highlight All Humans</button>
+    <button onclick="highlightAllGroups()">Highlight All Groups</button>
+</body>
+</html>
