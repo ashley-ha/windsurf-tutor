@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DOM Traversal Exercise</title>
+    <style>
+        .menu { margin: 20px; }
+        .category { border: 2px solid #333; padding: 10px; margin: 10px; }
+        .item { border: 1px solid #666; padding: 5px; margin: 5px; }
+        .price { color: #666; }
+        .selected { background-color: #ff91ee; }
+    </style>
+</head>
+<body>
+    <div class="menu" id="restaurant-menu">
+        <div class="category" id="appetizers">
+            Appetizers
+            <div class="item">
+                Spring Rolls
+                <span class="price">$6.99</span>
+            </div>
+            <div class="item">
+                Salad
+                <span class="price">$8.99</span>
+            </div>
+        </div>
+        
+        <div class="category" id="main-course">
+            Main Course
+            <div class="item">
+                Pasta
+                <span class="price">$15.99</span>
+            </div>
+            <div class="item">
+                Steak
+                <span class="price">$24.99</span>
+            </div>
+            <div class="item">
+                Fish
+                <span class="price">$18.99</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="task1()">Task 1</button>
+        <button onclick="task2()">Task 2</button>
+        <button onclick="task3()">Task 3</button>
+    </div>
+
+    <script>
+        // Task 1: Starting from the Pasta item, highlight its parent category (Main Course)
+        // Get the first item in the main course section (which is Pasta)
+        const startMain = document.querySelector('#main-course .item');
+
+        function task1() {
+            const parent = startMain.parentElement;
+            clearHighlights();
+            parent.classList.add('selected');
+        }
+
+        // Task 2: Starting from the Main Course category, highlight all its item children
+        function task2() {
+            const parent = document.getElementById('.main-course')
+            clearHighlights();
+            const children = parent.children;
+            Array.from(children).forEach(child => {
+                if (child.classList.contains('child')) {
+                    child.classList.add('selected')
+                }
+            })
+        }
+
+        // Task 3: Starting from the Pasta item, highlight its next sibling (Steak)
+        function task3() {
+            // Your code here
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.selected').forEach(el => 
+                el.classList.remove('selected')
+            );
+        }
+    </script>
+</body>
+</html>
