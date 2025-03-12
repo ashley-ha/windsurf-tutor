@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Manager</title>
+    <style>
+        .task {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .completed {
+            background-color: #f0fff0;
+            text-decoration: line-through;
+        }
+        .high-priority {
+            border-left: 5px solid red;
+        }
+        .medium-priority {
+            border-left: 5px solid orange;
+        }
+        .low-priority {
+            border-left: 5px solid green;
+        }
+    </style>
+</head>
+<body>
+    <div id="task-manager">
+        <h2>Task Manager</h2>
+        <div id="task-list">
+            <div class="task medium-priority" id="task1">
+                <span class="task-text">Review project proposal</span>
+                <button onclick="completeTask('task1')">Complete</button>
+            </div>
+            <div class="task high-priority" id="task2">
+                <span class="task-text">Fix critical bug</span>
+                <button onclick="completeTask('task2')">Complete</button>
+            </div>
+            <div class="task low-priority" id="task3">
+                <span class="task-text">Update documentation</span>
+                <button onclick="completeTask('task3')">Complete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Your code goes here!
+        
+        // Task 1: Complete the completeTask function
+        // It should:
+        // - Add the 'completed' class to the task
+        // - Change the button text to "Undo"
+        // - Change the onclick handler to undoTask
+        function completeTask(taskId) {
+            
+        }
+
+        // Task 2: Implement the undoTask function
+        // It should:
+        // - Remove the 'completed' class
+        // - Change the button text back to "Complete"
+        // - Change the onclick handler back to completeTask
+        function undoTask(taskId) {
+            // Your code here
+        }
+
+        // Bonus Task: Add a function to count and display 
+        // the number of completed and uncompleted tasks
+        // Display this information somewhere on the page
+    </script>
+</body>
+</html>

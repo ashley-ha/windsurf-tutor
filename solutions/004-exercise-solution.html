@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Manager - Solution</title>
+    <style>
+        .task {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .completed {
+            background-color: #f0fff0;
+            text-decoration: line-through;
+        }
+        .high-priority {
+            border-left: 5px solid red;
+        }
+        .medium-priority {
+            border-left: 5px solid orange;
+        }
+        .low-priority {
+            border-left: 5px solid green;
+        }
+        #task-counter {
+            margin: 10px;
+            padding: 10px;
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div id="task-manager">
+        <h2>Task Manager</h2>
+        <div id="task-counter"></div>
+        <div id="task-list">
+            <div class="task medium-priority" id="task1">
+                <span class="task-text">Review project proposal</span>
+                <button onclick="completeTask('task1')">Complete</button>
+            </div>
+            <div class="task high-priority" id="task2">
+                <span class="task-text">Fix critical bug</span>
+                <button onclick="completeTask('task2')">Complete</button>
+            </div>
+            <div class="task low-priority" id="task3">
+                <span class="task-text">Update documentation</span>
+                <button onclick="completeTask('task3')">Complete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function completeTask(taskId) {
+            const task = document.getElementById(taskId);
+            const button = task.querySelector('button');
+            
+            // Add completed class
+            task.classList.add('completed');
+            
+            // Update button
+            button.textContent = 'Undo';
+            button.onclick = function() { undoTask(taskId); };
+            
+            updateTaskCounter();
+        }
+
+        function undoTask(taskId) {
+            const task = document.getElementById(taskId);
+            const button = task.querySelector('button');
+            
+            // Remove completed class
+            task.classList.remove('completed');
+            
+            // Update button
+            button.textContent = 'Complete';
+            button.onclick = function() { completeTask(taskId); };
+            
+            updateTaskCounter();
+        }
+
+        function updateTaskCounter() {
+            const tasks = document.getElementsByClassName('task');
+            const completedTasks = document.getElementsByClassName('completed');
+            const counter = document.getElementById('task-counter');
+            
+            counter.textContent = `Completed: ${completedTasks.length} | Remaining: ${tasks.length - completedTasks.length}`;
+        }
+
+        // Initialize counter
+        updateTaskCounter();
+    </script>
+</body>
+</html>
