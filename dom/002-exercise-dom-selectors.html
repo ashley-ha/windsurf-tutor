@@ -41,16 +41,28 @@
         
         // Task 1: Get the shopping cart container by its ID
         // Hint: Use getElementById
+        const shoppingCart = document.getElementById('shopping-cart')
         
         // Task 2: Get all cart items
         // Hint: Use getElementsByClassName
-        
+        const cartItems = document.getElementsByClassName('cart-item')
+        const cartTotals = cartItems.length
+        console.log('Total items:', cartTotals)
         // Task 3: Get all items that are out of stock
         // Hint: Use getElementsByClassName with 'out-of-stock'
-        
+        const noStock = document.getElementsByClassName('out-of-stock')
+        const noStockTotals = noStock.length
+        console.log('Out of stock items: ', noStockTotals)
+
         // Task 4: Get all prices and calculate the total
         // Hint: Use getElementsByClassName and loop through the elements
-        
+        let total = 0
+        const elements = document.getElementsByClassName('item-price')
+        for (let i = 0; i < elements.length; i++){
+            let value = parseFloat(elements[i].textContent.replace('$', ''))
+            total = value + total
+        }
+        console.log('Total prices of all items:', total)
         // Log your results to the console!
     </script>
 </body>

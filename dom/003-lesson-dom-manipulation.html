@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventory Management</title>
+    <style>
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px;
+            display: inline-block;
+            width: 200px;
+        }
+        .low-stock {
+            background-color: #fff3f3;
+        }
+        .out-of-stock {
+            background-color: #ffebeb;
+        }
+    </style>
+</head>
+<body>
+    <div id="inventory">
+        <div class="product-card" id="product1">
+            <h3>Gaming Mouse</h3>
+            <p class="stock">Stock: 5</p>
+            <button onclick="updateStock('product1', -1)">Sell One</button>
+        </div>
+        <div class="product-card" id="product2">
+            <h3>Wireless Keyboard</h3>
+            <p class="stock">Stock: 3</p>
+            <button onclick="updateStock('product2', -1)">Sell One</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. Modifying element content
+        function updateStock(productId, change) {
+            // Get the product card
+            const product = document.getElementById(productId);
+            
+            // Get the stock element
+            const stockElement = product.querySelector('.stock');
+            
+            // Get current stock number
+            let currentStock = parseInt(stockElement.textContent.replace('Stock: ', ''));
+            
+            // Update stock
+            currentStock += change;
+            
+            // Update the text content
+            stockElement.textContent = `Stock: ${currentStock}`;
+            
+            // 2. Modifying element classes
+            if (currentStock <= 0) {
+                product.classList.add('out-of-stock');
+                product.classList.remove('low-stock');
+            } else if (currentStock <= 3) {
+                product.classList.add('low-stock');
+                product.classList.remove('out-of-stock');
+            } else {
+                product.classList.remove('low-stock', 'out-of-stock');
+            }
+            
+            // 3. Creating and adding new elements
+            if (currentStock === 0) {
+                const soldOutMsg = document.createElement('p');
+                soldOutMsg.textContent = 'SOLD OUT';
+                soldOutMsg.style.color = 'red';
+                soldOutMsg.style.fontWeight = 'bold';
+                
+                // Only add if we haven't already added a sold out message
+                if (!product.querySelector('.sold-out')) {
+                    soldOutMsg.classList.add('sold-out');
+                    product.appendChild(soldOutMsg);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
