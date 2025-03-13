@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM BFS Traversal Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .test-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .interactive-element {
+            background-color: #f0f8ff;
+            border: 1px solid #add8e6;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        .hidden-element {
+            display: none;
+        }
+        .results {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 500px;
+            overflow: auto;
+        }
+        .highlight {
+            background-color: yellow;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #visualization {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <h1>DOM BFS Traversal Test</h1>
+    
+    <div class="controls">
+        <button id="run-test">Run BFS Traversal</button>
+        <button id="visualize">Visualize Interactive Elements</button>
+        <button id="clear-results">Clear Results</button>
+        <label><input type="checkbox" id="include-hidden"> Include Hidden Elements</label>
+    </div>
+    
+    <div class="test-container" id="test-area">
+        <h2>Test Area</h2>
+        
+        <div class="interactive-element">
+            <p>Basic Elements</p>
+            <button id="test-button">Test Button</button>
+            <a href="#" id="test-link">Test Link</a>
+            <input type="text" id="test-input" placeholder="Test Input">
+            <select id="test-select">
+                <option>Option 1</option>
+                <option>Option 2</option>
+            </select>
+        </div>
+        
+        <div class="interactive-element">
+            <p>ARIA and Custom Elements</p>
+            <div role="button" tabindex="0" id="aria-button">ARIA Button</div>
+            <div class="custom-clickable" onclick="alert('clicked')" style="cursor: pointer;">Custom Clickable Div</div>
+        </div>
+        
+        <div class="interactive-element">
+            <p>Hidden Elements</p>
+            <button class="hidden-element" id="hidden-button">Hidden Button</button>
+            <div aria-hidden="true" id="aria-hidden-element" tabindex="0">ARIA Hidden Element</div>
+        </div>
+        
+        <div class="interactive-element">
+            <p>Shadow DOM</p>
+            <div id="shadow-host">Shadow DOM Host</div>
+        </div>
+        
+        <div class="interactive-element">
+            <p>iFrame Content</p>
+            <iframe id="test-iframe" src="about:blank" width="300" height="100"></iframe>
+        </div>
+    </div>
+    
+    <div id="visualization"></div>
+    
+    <div id="results" class="results"></div>
+    
+    <script>
+        // DOM BFS traversal function
+        function bfsTraverseDom(startNode = document.body, options = {}) {
+            // Insert the entire DOM BFS function code here
+            // This is where you'll paste your implementation
+        }
+        
+        // Setup Shadow DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            const shadowHost = document.getElementById('shadow-host');
+            const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
+            shadowRoot.innerHTML = `
+                <style>
+                    button { background: purple; color: white; padding: 8px; }
+                </style>
+                <button id="shadow-button">Shadow DOM Button</button>
+                <div role="button" tabindex="0">Shadow DOM ARIA Button</div>
+            `;
+            
+            // Setup iframe content
+            const iframe = document.getElementById('test-iframe');
+            iframe.addEventListener('load', () => {
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    iframeDoc.body.innerHTML = `
+                        <button id="iframe-button">iFrame Button</button>
+                        <a href="#" id="iframe-link">iFrame Link</a>
+                    `;
+                } catch (e) {
+                    console.error('Failed to set iframe content:', e);
+                }
+            });
+            iframe.src = 'about:blank';
+            
+            // Event listeners
+            document.getElementById('run-test').addEventListener('click', runTest);
+            document.getElementById('visualize').addEventListener('click', visualizeElements);
+            document.getElementById('clear-results').addEventListener('click', () => {
+                document.getElementById('results').innerHTML = '';
+                document.getElementById('visualization').innerHTML = '';
+            });
+        });
+        
+        function runTest() {
+            const includeHidden = document.getElementById('include-hidden').checked;
+            const options = {
+                includeHidden,
+                debug: true
+            };
+            
+            const testArea = document.getElementById('test-area');
+            const result = bfsTraverseDom(testArea, options);
+            
+            // Display results
+            const resultsElement = document.getElementById('results');
+            resultsElement.textContent = JSON.stringify(result, (key, value) => {
+                // Handle circular references
+                if (key === 'elementMap') return '[Map Object]';
+                return value;
+            }, 2);
+            
+            // Show summary
+            const summary = `
+                Total elements: ${result.stats.totalElements}
+                Interactive elements: ${result.stats.interactiveElements}
+                Shadow roots: ${result.stats.shadowRoots}
+                Iframes: ${result.stats.iframes}
+                Max depth reached: ${result.stats.maxDepthReached}
+            `;
+            
+            resultsElement.textContent = summary + '\n\n' + resultsElement.textContent;
+            
+            console.log('BFS Result:', result);
+            return result;
+        }
+        
+        function visualizeElements() {
+            const result = runTest();
+            const visualizationArea = document.getElementById('visualization');
+            visualizationArea.innerHTML = '<h3>Interactive Elements Visualization</h3>';
+            
+            // Create bounding boxes for each interactive element
+            result.interactiveElements.forEach((element, index) => {
+                if (element.position.visible && element.position.width > 0 && element.position.height > 0) {
+                    const box = document.createElement('div');
+                    box.style.position = 'absolute';
+                    box.style.border = '2px solid red';
+                    box.style.backgroundColor = 'rgba(255, 0, 0, 0.1)';
+                    box.style.left = `${element.position.viewportX}px`;
+                    box.style.top = `${element.position.viewportY}px`;
+                    box.style.width = `${element.position.width}px`;
+                    box.style.height = `${element.position.height}px`;
+                    box.style.pointerEvents = 'none';
+                    box.style.zIndex = '10000';
+                    
+                    const label = document.createElement('div');
+                    label.style.position = 'absolute';
+                    label.style.top = '-20px';
+                    label.style.left = '0';
+                    label.style.backgroundColor = 'black';
+                    label.style.color = 'white';
+                    label.style.padding = '2px 5px';
+                    label.style.fontSize = '10px';
+                    label.style.borderRadius = '2px';
+                    label.textContent = `${index}: ${element.tag}${element.id ? '#'+element.id : ''}`;
+                    
+                    box.appendChild(label);
+                    visualizationArea.appendChild(box);
+                    
+                    // Also highlight the original element
+                    try {
+                        const originalElement = document.querySelector(element.selector);
+                        if (originalElement) {
+                            originalElement.classList.add('highlight');
+                        }
+                    } catch (e) {
+                        console.error('Selector error:', e);
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
